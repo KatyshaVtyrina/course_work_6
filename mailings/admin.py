@@ -5,6 +5,6 @@ from mailings.models import Client
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'price', 'category',)
-    search_fields = ('title', 'description',)
-    list_filter = ('category',)
+    list_display = ('email', 'name', 'comment',)
+    search_fields = ('name', 'email',)
+    list_filter = ('name',)
