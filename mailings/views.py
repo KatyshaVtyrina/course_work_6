@@ -2,7 +2,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from mailings.forms import ClientForm
 from mailings.models import Client, Mailings
@@ -20,14 +20,18 @@ class ClientListView(ListView):
     model = Client
 
 
+class ClientDetailView(DetailView):
+    model = Client
+
+
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('mailings:client_menu')
+    success_url = reverse_lazy('mailings:client_list')
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.created_by = self.request.user
+        self.object.user = self.request.user
         self.object.save()
 
         return super().form_valid(form)
@@ -36,12 +40,12 @@ class ClientCreateView(CreateView):
 class ClientUpdateView(UpdateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('mailings:client_menu')
+    success_url = reverse_lazy('mailings:client_list')
 
 
 class ClientDeleteView(DeleteView):
     model = Client
-    success_url = reverse_lazy('mailings:client_menu')
+    success_url = reverse_lazy('mailings:client_list')
 
 
 class MailingsListView(ListView):
