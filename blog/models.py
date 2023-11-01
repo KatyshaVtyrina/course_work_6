@@ -5,7 +5,7 @@ from mailings.models import NULLABLE
 
 
 class Post(models.Model):
-    name = models.CharField(max_length=150, verbose_name='заголовок')
+    title = models.CharField(max_length=150, verbose_name='заголовок')
     slug = models.CharField(max_length=150, verbose_name='slug', **NULLABLE)
     content = models.TextField(verbose_name='содержимое')
     image = models.ImageField(upload_to='posts/', verbose_name='изображение', **NULLABLE)
