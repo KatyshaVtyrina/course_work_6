@@ -1,6 +1,7 @@
 from django.db import models
 
 from config import settings
+from users.models import User
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -20,20 +21,72 @@ class Client(models.Model):
         verbose_name_plural = 'клиенты'
 
     def __str__(self):
-        return f'{self.email} - {self.name}'
-
-
-class Mailings(models.Model):
-    """Модель, описывающая настройки рассылки"""
-    ...
+        return f'Клиент{self.name}, электронная почта {self.email}'
 
 
 class Message(models.Model):
     """Модель, описывающая тему и сообщение рассылки"""
-    ...
+    subject = models.TextField(verbose_name='тема письма')
+    body = models.TextField(verbose_name='тело письма')
+
+    class Meta:
+        verbose_name = 'сообщение'
+        verbose_name_plural = 'сообщения'
+
+    def __str__(self):
+        return self.subject
+
+
+class Mailings(models.Model):
+    """Модель, описывающая настройки рассылки"""
+    FREQUENCY_CHOICES = [
+        ('DAILY', 'Раз в день'),
+        ('WEEKLY', 'Раз в неделю'),
+        ('MONTHLY', 'Раз в месяц')
+    ]
+
+    STATUS_CHOICES = [
+        ('CREATED', 'Завершена'),
+        ('STARTED', 'Создана'),
+        ('FINISHED', 'Запущена')
+    ]
+
+    time_start = models.TimeField(verbose_name='время начала рассылки')
+    time_end = models.TimeField(verbose_name='время конца рассылки')
+    frequency = models.TextField(max_length=10, verbose_name='периодичность', choices=FREQUENCY_CHOICES)
+    status = models.TextField(max_length=10, verbose_name='статус', choices=STATUS_CHOICES)
+
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    clients = models.ManyToManyField(Client)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'рассылка'
+        verbose_name_plural = 'рассылки'
+
+    def __str__(self):
+        return f'Рассылка {self.pk}'
 
 
 class MailingsLogs(models.Model):
     """Модель, описывающая логи рассылки"""
-    ...
+
+    STATUS_CHOICES = [
+        ('SENT', 'Отправлено'),
+        ('FAILED', 'Не удалось отправить'),
+    ]
+
+    time = models.DateTimeField(auto_now_add=True, verbose_name='дата и время попытки')
+    status = models.TextField(verbose_name='статус попытки', choices=STATUS_CHOICES)
+    server_response = models.TextField(verbose_name='ответ почтового сервера', **NULLABLE)
+
+    mailing = models.ForeignKey(Mailings, on_delete=models.CASCADE, verbose_name='рассылка')
+
+    class Meta:
+        verbose_name = 'лог отправки письма'
+        verbose_name_plural = 'логи отправки писем'
+
+    def __str__(self):
+        return f'Лог {self.pk}'
+
 
