@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from config import settings
 from users.models import User
@@ -21,7 +22,7 @@ class Client(models.Model):
         verbose_name_plural = 'клиенты'
 
     def __str__(self):
-        return f'Клиент{self.name}, электронная почта {self.email}'
+        return f'{self.name} - {self.email}'
 
 
 class Message(models.Model):
@@ -46,19 +47,19 @@ class Mailings(models.Model):
     ]
 
     STATUS_CHOICES = [
-        ('CREATED', 'Завершена'),
-        ('STARTED', 'Создана'),
-        ('FINISHED', 'Запущена')
+        ('CREATED', 'Создана'),
+        ('STARTED', 'Запущена'),
+        ('FINISHED', 'Завершена')
     ]
 
-    time_start = models.TimeField(verbose_name='время начала рассылки')
-    time_end = models.TimeField(verbose_name='время конца рассылки')
+    time_start = models.TimeField(verbose_name='время начала рассылки', default=timezone.now)
+    time_end = models.TimeField(verbose_name='время конца рассылки', default=timezone.now)
     frequency = models.TextField(max_length=10, verbose_name='периодичность', choices=FREQUENCY_CHOICES)
-    status = models.TextField(max_length=10, verbose_name='статус', choices=STATUS_CHOICES)
+    status = models.TextField(max_length=10, verbose_name='статус', choices=STATUS_CHOICES, default='CREATED')
 
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    clients = models.ManyToManyField(Client)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='тема письма')
+    clients = models.ManyToManyField(Client, verbose_name='клиенты')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь')
 
     class Meta:
         verbose_name = 'рассылка'
@@ -88,5 +89,3 @@ class MailingsLogs(models.Model):
 
     def __str__(self):
         return f'Лог {self.pk}'
-
-
