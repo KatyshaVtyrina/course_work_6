@@ -1,11 +1,10 @@
-from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from mailings.forms import ClientForm
-from mailings.models import Client, Mailings
+from mailings.forms import ClientForm, MailingForm, MessageForm
+from mailings.models import Client, Mailings, Message
 
 
 def display_home(request):
@@ -48,7 +47,65 @@ class ClientDeleteView(DeleteView):
     success_url = reverse_lazy('mailings:client_list')
 
 
-class MailingsListView(ListView):
+def display_mailings_menu(request):
+    return render(request, 'mailings/mailings_menu.html')
+
+
+class MailingListView(ListView):
     model = Mailings
-    success_url = reverse_lazy('mailings:home')
+
+
+class MailingDetailView(DetailView):
+    model = Mailings
+
+
+class MailingCreateView(CreateView):
+    model = Mailings
+    form_class = MailingForm
+    success_url = reverse_lazy('mailings:mailing_list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
+
+class MailingUpdateView(UpdateView):
+    model = Mailings
+    form_class = MailingForm
+    success_url = reverse_lazy('mailings:mailing_list')
+
+
+class MailingDeleteView(DeleteView):
+    model = Mailings
+    success_url = reverse_lazy('mailings:mailing_list')
+
+
+class MessageListView(ListView):
+    model = Message
+
+
+class MessageCreateView(CreateView):
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy('mailings:message_list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.user = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
+
+
+class MessageUpdateView(UpdateView):
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy('mailings:mailing_list')
+
+
+class MessageDeleteView(DeleteView):
+    model = Message
+    success_url = reverse_lazy('mailings:mailing_list')
 
