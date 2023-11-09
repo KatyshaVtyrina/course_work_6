@@ -15,10 +15,10 @@ class Post(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.slug is None:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
 
     def __str__(self):
-        return f'{self.name} {self.slug}'
+        return f'{self.title} {self.slug}'
 
     class Meta:
         verbose_name = 'Пост'
