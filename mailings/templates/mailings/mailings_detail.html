@@ -1,0 +1,36 @@
+{% extends 'mailings/base.html' %}
+{% block content %}
+<div class="col">
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <td>Время начала рассылки</td>
+                    <td>{{ object.time_start }}</td>
+                </tr>
+                <tr>
+                    <td>Время завершения рассылки</td>
+                    <td>{{ object.end }}</td>
+                </tr>
+              <tr>
+                    <td>Периодичность</td>
+                    <td>{{ object.frequency }}</td>
+                </tr>
+                <tr>
+                    <td>Статус</td>
+                    <td>{{ object.status}}</td>
+                </tr>
+                <tr>
+                    <td>Сообщение</td>
+                    <td>{{ object.message}}</td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'mailings:mailing_list' %}" class="btn btn-dark"><< Назад</a>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
