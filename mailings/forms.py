@@ -1,9 +1,9 @@
 from django import forms
 
-from mailings.models import Client
+from mailings.models import Client, Mailings, Message
 
 
-class StyleForMixin:
+class StyleFormMixin:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -12,9 +12,20 @@ class StyleForMixin:
             field.widget.attrs['class'] = 'form-control'
 
 
-class ClientForm(StyleForMixin, forms.ModelForm):
+class ClientForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Client
         exclude = ('user',)
 
+
+class MailingForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Mailings
+        exclude = ('status', 'user')
+
+
+class MessageForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = '__all__'
