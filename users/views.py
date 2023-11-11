@@ -1,7 +1,7 @@
 from django.contrib.auth import login
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from users.services import send_code_email
 from users.forms import UserRegisterForm, UserProfileForm
@@ -29,6 +29,11 @@ class ProfileView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class ProfileDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('users:register')
 
 
 def display_verification(request):
