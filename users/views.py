@@ -1,5 +1,5 @@
 from django.contrib.auth import login
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView
 
@@ -12,7 +12,7 @@ class RegisterView(CreateView):
     model = User
     form_class = UserRegisterForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy('users:login')
+    success_url = reverse_lazy('users:display_verification')
 
     def form_valid(self, form):
         obj = form.save()
@@ -29,6 +29,11 @@ class ProfileView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+def display_verification(request):
+    """Перенаправляет на сообщение о верификации"""
+    return render(request, 'users/verification.html')
 
 
 def verification_user(request, user_pk):
