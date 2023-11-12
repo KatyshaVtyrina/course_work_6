@@ -1,11 +1,17 @@
-
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from blog.models import Post
+from blog.services import cache_posts
 
 
 class PostListView(ListView):
     model = Post
+    data = Post.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['subjects'] = cache_posts()
+        return context_data
 
 
 class PostDetailView(DetailView):

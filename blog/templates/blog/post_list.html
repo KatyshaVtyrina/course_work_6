@@ -7,9 +7,9 @@
 </div>
 
 <div class="container">
-    {% if object_list%}
+    {% if subjects%}
         <div class="row text-center">
-            {% for object in object_list %}
+            {% for subject in subjects %}
             {% include 'blog/includes/inc_post_card.html' %}
             {% endfor %}
     </div>
