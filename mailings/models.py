@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils import timezone
-
 from config import settings
 from users.models import User
 
@@ -28,7 +26,7 @@ class Client(models.Model):
 class Message(models.Model):
     """Модель, описывающая тему и сообщение рассылки"""
     subject = models.TextField(verbose_name='тема письма')
-    body = models.TextField(verbose_name='тело письма')
+    body = models.TextField(verbose_name='текст письма')
 
     class Meta:
         verbose_name = 'сообщение'
@@ -45,6 +43,11 @@ class Mailings(models.Model):
         ('WEEKLY', 'Раз в неделю'),
         ('MONTHLY', 'Раз в месяц')
     ]
+    SLEEP_DICT = {
+        'DAILY': 20,
+        'WEEKLY': 30,
+        'MONTHLY': 60
+    }
 
     STATUS_CHOICES = [
         ('CREATED', 'Создана'),
@@ -52,8 +55,8 @@ class Mailings(models.Model):
         ('FINISHED', 'Завершена')
     ]
 
-    time_start = models.TimeField(verbose_name='время начала рассылки', default=timezone.now)
-    time_end = models.TimeField(verbose_name='время конца рассылки', default=timezone.now)
+    time_start = models.DateTimeField(verbose_name='время начала рассылки')
+    time_end = models.DateTimeField(verbose_name='время конца рассылки')
     frequency = models.TextField(max_length=10, verbose_name='периодичность', choices=FREQUENCY_CHOICES)
     status = models.TextField(max_length=10, verbose_name='статус', choices=STATUS_CHOICES, default='CREATED')
 
