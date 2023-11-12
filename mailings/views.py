@@ -19,9 +19,9 @@ class HomeView(TemplateView):
         context_data = super().get_context_data(**kwargs)
         mailings = Mailings.objects
         context_data['mailing_all'] = mailings.all().count()
-        # context_data['mailing_active'] = mailings.filter(status=Mailings.CREATED).count()
+        context_data['mailing_active'] = mailings.filter(status='CREATED').count()
         context_data['unique_clients'] = Client.objects.distinct().count()
-        context_data['posts'] = random.sample(list(Post.objects.all()), 3)
+        context_data['posts_list'] = random.sample(list(Post.objects.all()), 3)
         return context_data
 
 

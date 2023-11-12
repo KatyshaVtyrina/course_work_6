@@ -1,41 +1,45 @@
 {% extends 'mailings/base.html' %}
-
+{% load mediapath %}
 {% block content %}
 
 <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
-  <div class="col-md-5 p-lg-5 mx-auto my-5">
-    <h1 class="display-4 font-weight-normal">Сервис рассылок</h1>
-    <p class="lead font-weight-normal">Рассылки для информирования и привлечения клиентов.</p>
-<!--    <a class="btn btn-outline-secondary" href="#">Скоро в продаже</a>-->
-  </div>
-  <div class="product-device shadow-sm d-none d-md-block"></div>
-  <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Сервис рассылок</h1>
+        <p class="lead font-weight-normal">Рассылки для информирования и привлечения клиентов.</p>
+        <div class="card-body text-muted">
+            <ul class="list-unstyled mt-3 mb-4">
+                <li>Всего рассылок: {{ mailing_all }}</li>
+                <li>Всего активных рассылок: {{ mailing_active }}</li>
+                <li>Количество уникальных клиентов для рассылок: {{ unique_clients }}</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="container">
+    {% if posts_list %}
+        <div class="row text-center">
+            {% for post in posts_list %}
+                <div class="col-4">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-2 font-weight-normal">{{post.title}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>{{post.content|truncatechars:150}}</li>
+                        </ul>
+                        <p><img src="{% mediapath post.image %}" width="150" height="120" alt="Картинка"></p>
+                        <p><a class="btn btn-secondary" href="{% url 'blog:post_detail' post.pk post.slug  %}" role="button">Посмотреть &raquo;</a></p>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+    {% endif %}
 </div>
 
 
-<div class="container">
-  <!--  <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">-->
-  <div class="row text-center">
-    <div class="col-6">
-      <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-        <div class="my-3 py-3">
-          <h2 class="display-5">Клиенты</h2>
-          <p class="lead">Здесь можно посмотреть список всех клиентов и создать новых </p>
-          <p><a class="btn btn-secondary" href="{% url 'mailings:client_menu'%}" role="button">Подробнее &raquo;</a></p>
-        </div>
-        <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"></div>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-        <div class="my-3 py-3">
-          <h2 class="display-5">Рассылки</h2>
-          <p class="lead">Здесь можно посмотреть список всех рассылок, создать свою </p>
-          <p><a class="btn btn-secondary" href="{% url 'mailings:mailing_list'%}" role="button">Подробнее &raquo;</a></p>
-        </div>
-        <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"></div>
-      </div>
-    </div>
-  </div>
 
-{% endblock %}
+    {% endblock %}
