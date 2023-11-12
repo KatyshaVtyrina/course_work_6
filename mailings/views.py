@@ -1,15 +1,28 @@
+import random
+
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
+from blog.models import Post
 from mailings.forms import ClientForm, MailingForm, MessageForm
 from mailings.models import Client, Message
 from mailings.tasks import *
 
 
-def display_home(request):
-    return render(request, 'mailings/home.html')
+class HomeView(TemplateView):
+
+    template_name = 'mailings/home.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        mailings = Mailings.objects
+        context_data['mailing_all'] = mailings.all().count()
+        # context_data['mailing_active'] = mailings.filter(status=Mailings.CREATED).count()
+        context_data['unique_clients'] = Client.objects.distinct().count()
+        context_data['posts'] = random.sample(list(Post.objects.all()), 3)
+        return context_data
 
 
 def display_clients_menu(request):
