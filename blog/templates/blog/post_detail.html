@@ -9,7 +9,7 @@
                 <table class="table">
                     <tr>
                         <td>Заголовок</td>
-                        <td>{{ object.name }}</td>
+                        <td>{{ object.title }}</td>
                     </tr>
                     <tr>
                         <td>Содержимое</td>
@@ -31,7 +31,7 @@
                 </table>
             </div>
             <div class="card-footer">
-                <a href="{% url 'mailings:home' %}" class="btn btn-primary"><< Назад</a>
+                <a href="{% url 'blog:post_list' %}" class="btn btn-primary"><< Назад</a>
                 </a>
             </div>
         </div>
