@@ -6,6 +6,6 @@ from blog.views import PostListView, PostDetailView
 app_name = BlogConfig.name
 
 urlpatterns = [
-    path('blog', PostListView.as_view(), name='post_list'),
-    path('blog', PostDetailView.as_view(), name='post_detail'),
+    path('', PostListView.as_view(), name='post_list'),
+    path('post/<int:pk>/<str:slug>/', PostDetailView.as_view(), name='post_detail'),
 ]
