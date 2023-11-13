@@ -2,8 +2,8 @@ import random
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
@@ -158,6 +158,15 @@ class MailingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         client = self.get_object()
         user = self.request.user
         return client.user == user or user.is_superuser
+
+
+def change_status_mailing(pk):
+    """Отключает рассылку"""
+    obj = get_object_or_404(Mailings, pk=pk)
+    if obj.status == 'CREATED' or 'STARTED':
+        obj.status = 'FINISHED'
+    obj.save()
+    return redirect(reverse('mailings:mailings_list'))
 
 
 class MessageListView(LoginRequiredMixin, ListView):
