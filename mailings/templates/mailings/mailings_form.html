@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        Создать рассылку
+                        {% if object %}Изменить рассылку{% else %}Создать рассылку{% endif %}
                     </h3>
                     <div class="card-body">
                         {% csrf_token %}
