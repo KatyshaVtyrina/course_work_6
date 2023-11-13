@@ -1,7 +1,7 @@
 import random
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
@@ -53,15 +53,25 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(LoginRequiredMixin, UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailings:client_list')
 
+    def test_func(self):
+        client = self.get_object()
+        user = self.request.user
+        return client.user == user or user.is_staff
 
-class ClientDeleteView(LoginRequiredMixin, DeleteView):
+
+class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('mailings:client_list')
+
+    def test_func(self):
+        client = self.get_object()
+        user = self.request.user
+        return client.user == user or user.is_staff
 
 
 @login_required
@@ -71,6 +81,13 @@ def display_mailings_menu(request):
 
 class MailingListView(LoginRequiredMixin, ListView):
     model = Mailings
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_staff:
+            return queryset
+
+        return queryset.filter(user=self.request.user)
 
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
@@ -122,19 +139,36 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
         return redirect('mailings:mailing_menu')
 
 
-class MailingUpdateView(LoginRequiredMixin, UpdateView):
+class MailingUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Mailings
     form_class = MailingForm
     success_url = reverse_lazy('mailings:mailing_list')
 
+    def test_func(self):
+        client = self.get_object()
+        user = self.request.user
+        return client.user == user or user.is_superuser
 
-class MailingDeleteView(LoginRequiredMixin, DeleteView):
+
+class MailingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Mailings
     success_url = reverse_lazy('mailings:mailing_list')
+
+    def test_func(self):
+        client = self.get_object()
+        user = self.request.user
+        return client.user == user or user.is_superuser
 
 
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_staff:
+            return queryset
+
+        return queryset.filter(user=self.request.user)
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -150,13 +184,23 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class MessageUpdateView(LoginRequiredMixin, UpdateView):
+class MessageUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('mailings:mailing_list')
 
+    def test_func(self):
+        client = self.get_object()
+        user = self.request.user
+        return client.user == user or user.is_superuser
 
-class MessageDeleteView(LoginRequiredMixin, DeleteView):
+
+class MessageDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Message
     success_url = reverse_lazy('mailings:mailing_list')
+
+    def test_func(self):
+        client = self.get_object()
+        user = self.request.user
+        return client.user == user or user.is_superuser
 
