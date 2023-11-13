@@ -27,9 +27,13 @@
 
             </table>
         </div>
+        {% if user.is_staff %}
+            {% if object.status == "CREATED" or object.status == "STARTED" %}
+             <a class="btn btn-danger" href="{% url 'mailings:change_status_mailing' object.pk %}">Отключить рассылку</a>
+            {% endif %}
+        {% endif %}
         <div class="card-footer">
             <a href="{% url 'mailings:mailing_list' %}" class="btn btn-dark"><< Назад</a>
-            </a>
         </div>
     </div>
 </div>
