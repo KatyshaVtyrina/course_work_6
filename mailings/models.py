@@ -28,6 +28,8 @@ class Message(models.Model):
     subject = models.TextField(verbose_name='тема письма')
     body = models.TextField(verbose_name='текст письма')
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь', **NULLABLE)
+
     class Meta:
         verbose_name = 'сообщение'
         verbose_name_plural = 'сообщения'
