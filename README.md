@@ -64,7 +64,8 @@ EMAIL_HOST_USER=адрес электронной почты для аутенф
 EMAIL_HOST_PASSWORD=пароль для аутенфикации на почтовом сервере
 
 DB_USER=имя пользователя (postgres)
-DB_NAME=название_бд (mailings)
+DB_NAME=название базы данных (mailings)
+SECRET_KEY=секретный ключ 
 ```
 *В проекте есть шаблон файла .env - `.env_exaple`
 
