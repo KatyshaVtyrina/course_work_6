@@ -11,10 +11,10 @@ class ClientAdmin(admin.ModelAdmin):
 
 
 @admin.register(Mailings)
-class Mailings(admin.ModelAdmin):
+class MailingsAdmin(admin.ModelAdmin):
     list_display = ('id', 'time_start', 'time_end', 'frequency', 'status')
 
 
 @admin.register(MailingsLogs)
-class MailingsLogs(admin.ModelAdmin):
+class MailingsLogsAdmin(admin.ModelAdmin):
     list_display = ('server_response', 'mailing', 'status', 'time')
