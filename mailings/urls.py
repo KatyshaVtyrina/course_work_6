@@ -12,8 +12,7 @@ app_name = MailingsConfig.name
 
 
 urlpatterns = [
-    path('', cache_page(60)(HomeView.as_view()), name='home'),
-
+    path('', HomeView.as_view(), name='home'),
     path('clients/menu', display_clients_menu, name='client_menu'),
     path('clients/all', ClientListView.as_view(), name='client_list'),
     path('clients/detail/<int:pk>', ClientDetailView.as_view(), name='client_detail'),
