@@ -62,7 +62,7 @@ def verification_user(request, user_pk):
     return redirect(reverse('users:profile'))
 
 
-def change_status_user(user_pk):
+def change_status_user(request, user_pk):
     user = get_object_or_404(User, pk=user_pk)
     if user.is_active:
         user.is_active = False
