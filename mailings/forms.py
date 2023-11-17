@@ -24,10 +24,10 @@ class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailings
         exclude = ('status', 'user')
-        # widgets = {
-        #     'time_start': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        #     'time_end': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        # }
+        widgets = {
+            'time_start': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'time_end': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
 
 class MessageForm(StyleFormMixin, forms.ModelForm):
