@@ -13,14 +13,14 @@ app_name = MailingsConfig.name
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('clients/menu', display_clients_menu, name='client_menu'),
+    path('clients/menu', cache_page(60)(display_clients_menu), name='client_menu'),
     path('clients/all', ClientListView.as_view(), name='client_list'),
     path('clients/detail/<int:pk>', ClientDetailView.as_view(), name='client_detail'),
     path('clients/create', ClientCreateView.as_view(), name='client_create'),
     path('clients/update/<int:pk>', ClientUpdateView.as_view(), name='client_update'),
     path('clients/delete/<int:pk>', ClientDeleteView.as_view(), name='client_delete'),
 
-    path('mailings/menu', display_mailings_menu, name='mailing_menu'),
+    path('mailings/menu', cache_page(60)(display_mailings_menu), name='mailing_menu'),
     path('mailings/all', MailingListView.as_view(), name='mailing_list'),
     path('mailings/detail/<int:pk>', MailingDetailView.as_view(), name='mailing_detail'),
     path('mailings/create/', MailingCreateView.as_view(), name='mailing_create'),
