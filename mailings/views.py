@@ -160,13 +160,13 @@ class MailingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return client.user == user or user.is_superuser
 
 
-def change_status_mailing(pk):
+def change_status_mailing(request, pk):
     """Отключает рассылку"""
     obj = get_object_or_404(Mailings, pk=pk)
     if obj.status == 'CREATED' or 'STARTED':
         obj.status = 'FINISHED'
     obj.save()
-    return redirect(reverse('mailings:mailings_list'))
+    return redirect(reverse('mailings:mailing_list'))
 
 
 class MessageListView(LoginRequiredMixin, ListView):
